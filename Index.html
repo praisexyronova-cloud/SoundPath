@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#061426">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+<title>SoundPath</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #061426;
+  color: white;
+}
+
+header {
+  padding: 20px;
+  text-align: center;
+  background: #0a1b31;
+  border-bottom: 1px solid #203b5b;
+}
+
+.logo {
+  font-size: 29px;
+  font-weight: bold;
+  color: #a15bff;
+}
+
+header p {
+  color: #a9bbd4;
+  font-size: 13px;
+}
+
+main {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  padding-bottom: 90px;
+}
+
+h1 {
+  font-size: 27px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+p {
+  color: #b5c4d9;
+  line-height: 1.5;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.primary {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-weight: bold;
+  background: linear-gradient(
+    110deg, #793cff, #a23bff
+  );
+}
+
+.secondary {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #8752ff;
+  border-radius: 14px;
+  color: white;
+  background: transparent;
+  margin-top: 10px;
+}
+
+.card {
+  background: #10243c;
+  border: 1px solid #203d5d;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.instrument {
+  padding: 20px 8px;
+  background: #10243c;
+  color: white;
+  border: 1px solid #294561;
+  border-radius: 14px;
+  font-size: 15px;
+}
+
+.instrument:focus,
+.instrument:hover {
+  border-color: #a15bff;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: 1px solid #294561;
+  background: #10243c;
+  color: white;
+  margin: 10px 0;
+}
+
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 4px;
+  background: #09182b;
+  border-top: 1px solid #29415c;
+}
+
+nav button {
+  border: none;
+  background: none;
+  color: #b7c5da;
+  font-size: 12px;
+}
+
+nav button.active {
+  color: #b47aff;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+.song {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.song button {
+  margin-left: auto;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  color: white;
+  background: #7745ed;
+}
+
+.small {
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">♫ SoundPath</div>
+  <p>Learn any instrument. Play any song.</p>
+</header>
+
+<main>
+
+<section id="welcome" class="screen active">
+  <div style="text-align:center;padding:55px 0 35px">
+    <div style="font-size:95px;color:#a15bff">
+      ♫
+    </div>
+    <h1>Make Music Your Way</h1>
+    <p>Learn any instrument.<br>
+    Play any song. In any key.</p>
+  </div>
+
+  <div class="card">
+    <h2>Your Personal Music Academy</h2>
+    <p>Learn chords, practice songs, and
+    improve your musical skills.</p>
+  </div>
+
+  <button class="primary"
+    onclick="showScreen('instruments')">
+    Get Started
+  </button>
+
+  <button class="secondary"
+    onclick="showScreen('songs')">
+    Explore Songs
+  </button>
+</section>
+
+<section id="instruments" class="screen">
+  <h1>Choose Your Instrument</h1>
+  <p>Select what you want to learn.</p>
+
+  <div class="grid">
+    <button class="instrument"
+      onclick="chooseInstrument('Piano')">
+      🎹<br>Piano
+    </button>
+    <button class="instrument"
+      onclick="chooseInstrument('Guitar')">
+      🎸<br>Guitar
+    </button>
+    <button class="instrument"
+      onclick="chooseInstrument('Violin')">
+      🎻<br>Violin
+    </button>
+    <button class="instrument"
+      onclick="chooseInstrument('Drums')">
+      🥁<br>Drums
+    </button>
+    <button class="instrument"
+      onclick="chooseInstrument('Saxophone')">
+      🎷<br>Saxophone
+    </button>
+    <button class="instrument"
+      onclick="chooseInstrument('Flute')">
+      🪈<br>Flute
+    </button>
+  </div>
+
+  <div class="card">
+    Selected: <strong id="selectedInstrument">
+      None
+    </strong>
+  </div>
+
+  <button class="primary"
+    onclick="showScreen('songs')">
+    Continue to Songs
+  </button>
+</section>
+
+<section id="songs" class="screen">
+  <h1>Discover Songs</h1>
+  <p>Find a song to start learning.</p>
+
+  <input id="search"
+    placeholder="Search songs or artists..."
+    oninput="filterSongs()">
+
+  <div id="songList"></div>
+</section>
+
+<section id="lesson" class="screen">
+  <h1 id="lessonTitle">Song Lesson</h1>
+
+  <div class="card">
+    <p>Your instrument</p>
+    <h2 id="lessonInstrument">Guitar</h2>
+    <p>Beginner level</p>
+  </div>
+
+  <div class="card">
+    <h2>Chords to Practice</h2>
+    <div class="grid">
+      <button class="instrument"
+        onclick="showChord('C')">C</button>
+      <button class="instrument"
+        onclick="showChord('G')">G</button>
+      <button class="instrument"
+        onclick="showChord('Am')">Am</button>
+      <button class="instrument"
+        onclick="showChord('F')">F</button>
+    </div>
+    <p id="chordInfo">Choose a chord to learn.</p>
+  </div>
+
+  <button class="primary"
+    onclick="showScreen('practice')">
+    Practice Mode
+  </button>
+
+  <button class="secondary"
+    onclick="showScreen('changeKey')">
+    Change Key
+  </button>
+</section>
+
+<section id="practice" class="screen">
+  <h1>Practice Mode</h1>
+
+  <div class="card">
+    <p>Tempo</p>
+    <h2 id="tempoText">80 BPM</h2>
+    <input type="range" min="40" max="180"
+      value="80" id="tempo"
+      oninput="updateTempo()">
+
+    <p>Adjust the speed to suit your practice.</p>
+  </div>
+
+  <div class="card">
+    <h2>Practice Timer</h2>
+    <p id="timerText">Ready to practice?</p>
+    <button class="primary"
+      onclick="startPractice()">
+      Start / Stop Practice
+    </button>
+  </div>
+
+  <button class="secondary"
+    onclick="showScreen('songs')">
+    Back to Songs
+  </button>
+</section>
+
+<section id="changeKey" class="screen">
+  <h1>Change Key</h1>
+
+  <div class="card">
+    <label for="keySelect">Choose a new key</label>
+    <select id="keySelect"
+      style="width:100%;padding:12px;margin-top:12px">
+      <option>C Major</option>
+      <option>D Major</option>
+      <option>E Major</option>
+      <option>F Major</option>
+      <option>G Major</option>
+      <option>A Major</option>
+      <option>Bb Major</option>
+    </select>
+  </div>
+
+  <button class="primary"
+    onclick="applyKey()">
+    Apply Key
+  </button>
+
+  <p id="keyResult"></p>
+</section>
+
+<section id="progress" class="screen">
+  <h1>Your Progress</h1>
+
+  <div class="card">
+    <h2>🎵 Music Learner</h2>
+    <p>Songs opened: <span id="songCount">0</span></p>
+    <p>Practice sessions:
+      <span id="practiceCount">0</span></p>
+    <p>Instrument:
+      <span id="progressInstrument">None</span></p>
+  </div>
+</section>
+
+</main>
+
+<nav>
+  <button class="active"
+    onclick="showScreen('welcome',this)">
+    🏠<br>Home
+  </button>
+  <button onclick="showScreen('instruments',this)">
+    🎹<br>Learn
+  </button>
+  <button onclick="showScreen('songs',this)">
+    🎵<br>Songs
+  </button>
+  <button onclick="showScreen('progress',this)">
+    🏆<br>Progress
+  </button>
+</nav>
+
+<script>
+let instrument = 'Guitar';
+let currentSong = '';
+let songCount = 0;
+let practiceCount = 0;
+let practiceStarted = false;
+
+const songs = [
+  {title:'Perfect', artist:'Ed Sheeran'},
+  {title:'Someone Like You', artist:'Adele'},
+  {title:'Let Her Go', artist:'Passenger'},
+  {title:'Imagine', artist:'John Lennon'},
+  {title:'Hallelujah', artist:'Leonard Cohen'},
+  {title:'Billie Jean', artist:'Michael Jackson'}
+];
+
+function showScreen(id, button) {
+  document.querySelectorAll('.screen')
+    .forEach(s => s.classList.remove('active'));
+
+  document.getElementById(id)
+    .classList.add('active');
+
+  document.querySelectorAll('nav button')
+    .forEach(b => b.classList.remove('active'));
+
+  if (button) button.classList.add('active');
+}
+
+function chooseInstrument(name) {
+  instrument = name;
+
+  document.getElementById('selectedInstrument')
+    .textContent = name;
+
+  document.getElementById('lessonInstrument')
+    .textContent = name;
+
+  document.getElementById('progressInstrument')
+    .textContent = name;
+}
+
+function renderSongs(items) {
+  const list = document.getElementById('songList');
+  list.innerHTML = '';
+
+  items.forEach(song => {
+    const card = document.createElement('div');
+    card.className = 'card song';
+
+    const info = document.createElement('div');
+    const title = document.createElement('strong');
+    const artist = document.createElement('p');
+
+    title.textContent = song.title;
+    artist.textContent = song.artist;
+    artist.className = 'small';
+
+    info.append(title, artist);
+
+    const play = document.createElement('button');
+    play.textContent = '▶';
+    play.setAttribute('aria-label',
+      'Open ' + song.title);
+
+    play.onclick = () => openSong(song.title);
+
+    card.append(info, play);
+    list.append(card);
+  });
+}
+
+function filterSongs() {
+  const query = document.getElementById('search')
+    .value.toLowerCase();
+
+  renderSongs(songs.filter(song =>
+    (song.title + ' ' + song.artist)
+      .toLowerCase().includes(query)
+  ));
+}
+
+function openSong(title) {
+  currentSong = title;
+  songCount++;
+
+  document.getElementById('lessonTitle')
+    .textContent = currentSong;
+
+  document.getElementById('songCount')
+    .textContent = songCount;
+
+  showScreen('lesson');
+}
+
+function showChord(chord) {
+  const tips = {
+    C: 'C major: C, E, G',
+    G: 'G major: G, B, D',
+    Am: 'A minor: A, C, E',
+    F: 'F major: F, A, C'
+  };
+
+  document.getElementById('chordInfo')
+    .textContent = tips[chord];
+}
+
+function updateTempo() {
+  document.getElementById('tempoText')
+    .textContent =
+    document.getElementById('tempo').value + ' BPM';
+}
+
+function startPractice() {
+  practiceStarted = !practiceStarted;
+
+  if (practiceStarted) {
+    practiceCount++;
+    document.getElementById('practiceCount')
+      .textContent = practiceCount;
+
+    document.getElementById('timerText')
+      .textContent = 'Practice session started!';
+  } else {
+    document.getElementById('timerText')
+      .textContent = 'Practice paused.';
+  }
+}
+
+function applyKey() {
+  const key = document.getElementById('keySelect').value;
+
+  document.getElementById('keyResult')
+    .textContent = 'Selected key: ' + key +
+    '. Chord transposition will be added next.';
+}
+
+renderSongs(songs);
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .catch(error => console.error(
+        "Service worker registration failed:", error
+      ));
+  });
+}
+</script>
+
+</body>
+</html>

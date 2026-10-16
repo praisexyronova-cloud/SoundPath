@@ -1,0 +1,13 @@
+
+{
+  "id": "/",
+  "name": "SoundPath Music Academy",
+  "short_name": "SoundPath",
+  "description": "Learn instruments, chords, and songs.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#061426",
+  "theme_color": "#061426"
+}
